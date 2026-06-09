@@ -1,0 +1,443 @@
+## List of qBittorrent Version that is supported
+declare -a qb_ver_list=("4.3.9" "4.4.5" "4.5.5" "4.6.7" "5.0.3" "5.1.0" "5.2.1")
+#Generate the list of qBittorrent Version that is supported
+unset qb_name_list i
+for i in "${qb_ver_list[@]}"
+do
+	qb_name_list+=("qBittorrent-$i")
+done
+## List of libtorrent Version that is supported
+declare -a lib_ver_list=("v1.2.15" "v1.2.18" "v1.2.19" "v1.2.20" "v2.0.5" "v2.0.8" "v2.0.9" "v2.0.10" "v2.0.11" "v2.0.13")
+#Generate the list of libtorrent Version that is supported
+unset lib_name_list i
+for i in "${lib_ver_list[@]}"
+do
+	lib_name_list+=("libtorrent-$i")
+done
+qb_ver_choose(){
+	need_input "Please choose your qBittorrent Version:"
+	select opt in "${qb_name_list[@]}"
+	do
+		case $opt in
+		qBittorrent*)
+			qb_ver=${opt}; break
+			;;
+		*) warn "Please choose a valid version" ;;
+		esac
+	done
+}
+
+lib_ver_choose(){
+	## Check if qb_ver is empty
+	if [[ -z "$qb_ver" ]]; then
+		qb_ver_choose
+	fi
+
+	## Allow users to determine which version of libtorrent to go with the qBittorrent
+	need_input "Please choose your libtorrent version:"
+	select opt in "${lib_name_list[@]}"
+	do
+		case $opt in
+		libtorrent*)
+			lib_ver=${opt}; break
+			;;
+		*) warn "Please choose a valid version" ;;
+		esac
+	done
+}
+
+lib_ver_check(){
+	## Check if lib_ver is empty
+	if [[ -z "$lib_ver" ]]; then
+		lib_ver_choose
+	fi
+	## Check if the libtorrent version is supported
+	if [[ ! " ${lib_name_list[@]} " =~ " ${lib_ver} " ]]; then
+		warn "libtorrent $lib_ver is not supported"
+		lib_ver_choose
+	fi
+	## Check if the libtorrent version is compatible with qBittorrent version
+	if [[ "${qb_ver}" =~ "4.1." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" == "libtorrent-1_1_14" ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-1_1_x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+		done
+	elif [[ "${qb_ver}" =~ "4.2." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+	done
+	elif [[ "${qb_ver}" =~ "4.3." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+	done
+	elif [[ "${qb_ver}" =~ "4.4." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]] && [[ ! "${lib_ver}" =~ "libtorrent-v2.0." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver";
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x or libtorrent-v2.0.x only";
+				warn "Please choose a compatible version";
+				lib_ver_choose
+			else
+				break
+			fi
+		done
+	elif [[ "${qb_ver}" =~ "4.5." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]] && [[ ! "${lib_ver}" =~ "libtorrent-v2.0." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x or libtorrent-v2.0.x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+		done
+	elif [[ "${qb_ver}" =~ "4.6." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]] && [[ ! "${lib_ver}" =~ "libtorrent-v2.0." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x or libtorrent-v2.0.x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+		done
+	elif [[ "${qb_ver}" =~ "5.0." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]] && [[ ! "${lib_ver}" =~ "libtorrent-v2.0." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x or libtorrent-v2.0.x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+		done
+	elif [[ "${qb_ver}" =~ "5.1." ]]; then
+		while true
+		do
+			if [[ ! "${lib_ver}" =~ "libtorrent-v1.2." ]] && [[ ! "${lib_ver}" =~ "libtorrent-v2.0." ]]; then
+				tput sgr0; clear
+				warn "qBittorrent $qb_ver is not compatible with libtorrent $lib_ver"
+				warn "qBittorrent $qb_ver is compatible with libtorrent-v1.2.x or libtorrent-v2.0.x only"
+				warn "Please choose a compatible version"
+				lib_ver_choose
+			else
+				break
+			fi
+		done
+	fi
+}
+
+qb_install_check(){
+	# Check if qBittorrent version and libtorrent version are supported
+	## Check if the qBittorrent version is supported
+	if [[ ! " ${qb_name_list[@]} " =~ " ${qb_ver} " ]]; then
+		warn "qBittorrent $qb_ver is not supported"
+		qb_ver_choose
+	fi
+	## Check if the libtorrent version is supported
+	if [[ ! " ${lib_name_list[@]} " =~ " ${lib_ver} " ]]; then
+		warn "libtorrent $lib_ver is not supported"
+		lib_ver_check
+	fi
+	## Check if the libtorrent version is compatible with qBittorrent version
+	lib_ver_check
+}
+
+generate_qbittorrent_pbkdf2_password(){
+	python3 - "$1" <<'PY'
+import base64
+import hashlib
+import os
+import sys
+
+password = sys.argv[1]
+salt = os.urandom(16)
+hash_value = hashlib.pbkdf2_hmac("sha512", password.encode(), salt, 100000)
+print("{}:{}".format(
+    base64.b64encode(salt).decode(),
+    base64.b64encode(hash_value).decode(),
+))
+PY
+}
+
+install_qBittorrent_(){
+	username=$1
+	password=$2
+	qb_ver=$3
+	lib_ver=$4
+	qb_cache=$5
+	qb_port=$6
+	qb_incoming_port=$7
+
+	get_local_qbittorrent_pids_() {
+		for pid in $(pgrep -i -f qbittorrent-nox 2>/dev/null); do
+			if [ -r "/proc/$pid/cgroup" ] && grep -Eqi 'docker|containerd|kubepods|lxc' "/proc/$pid/cgroup"; then
+				continue
+			fi
+			echo "$pid"
+		done
+	}
+
+	## Check if qBittorrent is running
+	local_qb_pids=$(get_local_qbittorrent_pids_)
+	if [[ -n "$local_qb_pids" ]]; then
+		warn "qBittorrent is running. Stopping it now..."
+
+		if command -v systemctl >/dev/null 2>&1; then
+			systemctl stop "qbittorrent-nox@$username" >/dev/null 2>&1 || true
+		fi
+
+		kill -TERM $local_qb_pids >/dev/null 2>&1 || true
+		for i in {1..10}; do
+			local_qb_pids=$(get_local_qbittorrent_pids_)
+			if [[ -z "$local_qb_pids" ]]; then
+				break
+			fi
+			sleep 1
+		done
+		local_qb_pids=$(get_local_qbittorrent_pids_)
+		if [[ -n "$local_qb_pids" ]]; then
+			kill -KILL $local_qb_pids >/dev/null 2>&1 || true
+			sleep 1
+		fi
+	fi
+	# Check if it is still running
+	local_qb_pids=$(get_local_qbittorrent_pids_)
+	if [[ -n "$local_qb_pids" ]]; then
+		warn "Failed to stop qBittorrent. Please stop it manually"
+		return 1
+	fi
+
+	## Check if qbittorrent-nox is installed
+	if test -e /usr/bin/qbittorrent-nox; then
+		warn "qBittorrent is already installed. Replacing it now..."
+		rm /usr/bin/qbittorrent-nox
+	fi
+
+	## Download qBittorrent-nox executable
+	# Determine the CPU architecture
+	if [[ $(uname -m) == "x86_64" ]]; then
+		arch="x86_64"
+	elif [[ $(uname -m) == "aarch64" ]]; then
+		arch="aarch64"
+	elif [[ $(uname -m) == "armv7l" ]]; then
+		arch="armv7"
+	elif [[ $(uname -m) == "armv6l" ]]; then
+		arch="armhf"
+	elif [[ $(uname -m) == "i386" ]] || [[ $(uname -m) == "i686" ]]; then
+		arch="x86"
+	elif [[ $(uname -m) == "riscv64" ]]; then
+		arch="riscv64"
+	else
+		warn "Unsupported CPU architecture"
+		return 1
+	fi
+	qb_release=${qb_ver#qBittorrent-}
+	lib_release=${lib_ver#libtorrent-}
+	qb_download_url="https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${qb_release}_${lib_release}/${arch}-qbittorrent-nox"
+	wget "$qb_download_url" -O $HOME/qbittorrent-nox && chmod +x $HOME/qbittorrent-nox
+	#Check if the download is successful
+	if [ $? -ne 0 ]; then
+		warn "Failed to download qBittorrent-nox executable"
+		warn "Download URL: $qb_download_url"
+		return 1
+	fi
+
+	# Install qbittorrent-nox
+	mv $HOME/qbittorrent-nox /usr/bin/qbittorrent-nox
+	mkdir -p /home/$username/qbittorrent/Downloads && chown -R $username:$username /home/$username/qbittorrent/
+    mkdir -p /home/$username/.config/qBittorrent && chown $username:$username /home/$username/.config/qBittorrent
+
+	# Create systemd services
+	if test -e /etc/systemd/system/qbittorrent-nox@.service; then
+		warn "qBittorrent systemd services already exist. Removing it now..."
+		rm /etc/systemd/system/qbittorrent-nox@.service
+	fi
+	touch /etc/systemd/system/qbittorrent-nox@.service
+	cat << EOF >/etc/systemd/system/qbittorrent-nox@.service
+[Unit]
+Description=qBittorrent
+After=network.target
+
+[Service]
+Type=forking
+User=$username
+LimitNOFILE=infinity
+ExecStart=/usr/bin/qbittorrent-nox -d
+ExecStop=/usr/bin/killall -w -s 9 /usr/bin/qbittorrent-nox
+Restart=on-failure
+TimeoutStopSec=20
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    systemctl enable qbittorrent-nox@$username
+    systemctl start qbittorrent-nox@$username
+
+	## Configure qBittorrent
+	# Check for Virtual Environment since some of the tunning might not work on virtual machine
+	systemd-detect-virt > /dev/null
+	if [ $? -eq 0 ]; then
+		warn "Virtualization is detected, skipping some of the tunning"
+		aio=8
+		low_buffer=3072
+		buffer=15360
+		buffer_factor=200
+	else
+		#Determine if it is a SSD or a HDD
+		disk_name=$(printf $(lsblk | grep -m1 'disk' | awk '{print $1}'))
+		disktype=$(cat /sys/block/$disk_name/queue/rotational)
+		if [ "${disktype}" == 0 ]; then
+			aio=12
+			low_buffer=5120
+			buffer=20480
+			buffer_factor=250
+		else
+			aio=4
+			low_buffer=3072
+			buffer=10240
+			buffer_factor=150
+		fi
+	fi
+
+	# Editing qBittorrent settings
+    systemctl stop qbittorrent-nox@$username
+
+    if [[ "${qb_ver}" =~ "4.1." ]]; then
+        md5password=$(echo -n $password | md5sum | awk '{print $1}')
+        cat << EOF >/home/$username/.config/qBittorrent/qBittorrent.conf
+[BitTorrent]
+Session\AsyncIOThreadsCount=$aio
+Session\SendBufferLowWatermark=$low_buffer
+Session\SendBufferWatermark=$buffer
+Session\SendBufferWatermarkFactor=$buffer_factor
+
+[LegalNotice]
+Accepted=true
+
+[Network]
+Cookies=@Invalid()
+
+[Preferences]
+Connection\PortRangeMin=$qb_incoming_port
+Downloads\DiskWriteCacheSize=$qb_cache
+Downloads\SavePath=/home/$username/qbittorrent/Downloads/
+Queueing\QueueingEnabled=false
+WebUI\Password_ha1=@ByteArray($md5password)
+WebUI\Port=$qb_port
+WebUI\Username=$username
+EOF
+    elif [[ "${qb_ver}" =~ 4\.[23]\. ]]; then
+        PBKDF2password=$(generate_qbittorrent_pbkdf2_password "$password")
+        #Check if password generation is successful
+		if [ $? -ne 0 ]; then
+			warn "Failed to generate qBittorrent WebUI password"
+			#Clean up
+			rm -r /home/$username/qbittorrent/Downloads
+			rm -r /home/$username/.config/qBittorrent
+			rm /usr/bin/qbittorrent-nox
+			rm /etc/systemd/system/qbittorrent-nox@.service
+			return 1
+		fi
+        cat << EOF >/home/$username/.config/qBittorrent/qBittorrent.conf
+[BitTorrent]
+Session\AsyncIOThreadsCount=$aio
+Session\SendBufferLowWatermark=$low_buffer
+Session\SendBufferWatermark=$buffer
+Session\SendBufferWatermarkFactor=$buffer_factor
+
+[LegalNotice]
+Accepted=true
+
+[Network]
+Cookies=@Invalid()
+
+[Preferences]
+Connection\PortRangeMin=$qb_incoming_port
+Downloads\DiskWriteCacheSize=$qb_cache
+Downloads\SavePath=/home/$username/qbittorrent/Downloads/
+Queueing\QueueingEnabled=false
+WebUI\Password_PBKDF2="@ByteArray($PBKDF2password)"
+WebUI\Port=$qb_port
+WebUI\Username=$username
+EOF
+    elif [[ "${qb_ver}" =~ 4\.[456]\. ]] || [[ "${qb_ver}" =~ 5\. ]]; then
+        PBKDF2password=$(generate_qbittorrent_pbkdf2_password "$password")
+        #Check if password generation is successful
+		if [ $? -ne 0 ]; then
+			warn "Failed to generate qBittorrent WebUI password"
+			#Clean up
+			rm -r /home/$username/qbittorrent/Downloads
+			rm -r /home/$username/.config/qBittorrent
+			rm /usr/bin/qbittorrent-nox
+			rm /etc/systemd/system/qbittorrent-nox@.service
+			return 1
+		fi
+        cat << EOF >/home/$username/.config/qBittorrent/qBittorrent.conf
+[Application]
+MemoryWorkingSetLimit=$qb_cache
+
+[BitTorrent]
+Session\AsyncIOThreadsCount=$aio
+Session\DefaultSavePath=/home/$username/qbittorrent/Downloads/
+Session\DiskCacheSize=$qb_cache
+Session\Port=$qb_incoming_port
+Session\QueueingSystemEnabled=false
+Session\SendBufferLowWatermark=$low_buffer
+Session\SendBufferWatermark=$buffer
+Session\SendBufferWatermarkFactor=$buffer_factor
+
+[LegalNotice]
+Accepted=true
+
+[Network]
+Cookies=@Invalid()
+
+[Preferences]
+WebUI\Password_PBKDF2="@ByteArray($PBKDF2password)"
+WebUI\Port=$qb_port
+WebUI\Username=$username
+EOF
+    fi
+    systemctl start qbittorrent-nox@$username
+}
+
+return 0
